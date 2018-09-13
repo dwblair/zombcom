@@ -26,9 +26,9 @@ source.onerror = function(error) {
         <input type="submit">
     </form>
 
+
     <script>
     $("#sender").submit(function(){
-        event.preventDefault();
         var form = $(this);
         $.ajax({
           type: 'POST',

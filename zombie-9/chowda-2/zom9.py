@@ -55,7 +55,7 @@ ip = station.ifconfig()
 
 event_sinks = set()
 
-f=open('f.html')
+f=open('e.html')
 html=f.read()
 f.close()
 
@@ -86,11 +86,6 @@ def events(req, resp):
     event_sinks.add(resp)
     return False
 
-@app.route('/follow', methods=['GET', 'POST'])
-def habble(request, response):
-    print("wheee")
-    return success
-
 @app.route('/parse_data', methods=['GET', 'POST'])
 def goofy(request, response):
     print("wheee")
@@ -102,10 +97,13 @@ def goofy(request, response):
             content=request.form['test'][0]
             rfm9x.send(str(content))
             print("Sending:",content)
-            await push_event(">> %s" % str(content))
-            return success
-    return success
+            await push_event("- %s" % str(content))
+            yield from picoweb.start_response(response, "application/json")
+            yield from response.awriteiter(ijson.idumps({'note': 'huzzah', 'success': 1}))
+            return
 
+        yield from picoweb.jsonify(response, {'success': 0})
+        return
 
 def push_event(ev):
     global event_sinks
@@ -139,7 +137,7 @@ def push_count():
                     display_text="%s" % packet_text
                     update_display(display_text)
                 #await push_event("[#%s RSSI:%s]:  %s" % (i, rssi, packet_text))
-                await push_event("<< %s" % packet_text)
+                await push_event("- %s" % packet_text)
                 i += 1
             except:
                 print("some error?")

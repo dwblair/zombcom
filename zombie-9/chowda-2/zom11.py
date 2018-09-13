@@ -41,17 +41,18 @@ spi=SPI(2,baudrate=5000000,sck=sck,mosi=mosi,miso=miso)
 
 rfm9x = RFM9x(spi, cs, resetNum, 915.0)
 
-ssid = "zombie"
-password =  "disaster"
- 
-station = network.WLAN(network.STA_IF)
-station.active(True)
-station.connect(ssid, password)
+ap = network.WLAN(network.AP_IF)
+ap.active(False)
+time.sleep(1)
 
-while station.isconnected() == False:
-    pass
 
-ip = station.ifconfig()
+#ap.config(essid='uPY_12n', authmode=network.AUTH_WPA_WPA2_PSK, password="uPy1234")
+ap.config(essid='zombcom',  password="disaster")
+ap.active(True)
+#while accesspoint.isconnected() == False:
+#    pass
+#    
+ip=ap.ifconfig()
 
 event_sinks = set()
 
