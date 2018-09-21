@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <script>
+var source = new EventSource("events");
+source.onmessage = function(event) {
+    document.getElementById("result").innerHTML += event.data + "<br>";
+}
+source.onerror = function(error) {
+    console.log(error);
+    //document.getElementById("result").innerHTML += "server hiccup:" + error + "<br>";
+}
+
+</script>
+    <script src="static/js/jquery.js"></script>
+    </head>
+    <body>
+    
+    <body>
+<div id="header" style="font-size: 30pt">~~ZOM-B-COM~~</div>
+<div id="result" style="font-size: 30pt"></div>
+</body>
+
+    <form id="sender">
+        <input name="test" class="textbox">
+        <input type="submit">
+    </form>
+
+
+    <script>
+    $("#sender").submit(function(){
+        var form = $(this);
+        $.ajax({
+          type: 'POST',
+          url: "/parse_data",
+          data: form.serialize(),
+          contentType: 'application/json',
+          success: function(data){
+            console.log("POST successful")
+          }
+        });
+    });
+    </script>
+
+    </body>
+</html>
