@@ -118,5 +118,5 @@ rockblock = ROCKBLOCK(uart_no=2,timeout=4000,rx=rx,tx=tx)
 
 print("test")
 loop = asyncio.get_event_loop()
-#loop.create_task(rockblock._recv())
+loop.create_task(rockblock._recv())
 loop.create_task(test())
